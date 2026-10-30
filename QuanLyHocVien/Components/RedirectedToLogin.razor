@@ -1,0 +1,13 @@
+﻿@inject NavigationManager Navigation
+
+<p>Đang chuyển đến trang đăng nhập...</p>
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Navigation.NavigateTo("/Login", replace: true);
+        }
+    }
+}

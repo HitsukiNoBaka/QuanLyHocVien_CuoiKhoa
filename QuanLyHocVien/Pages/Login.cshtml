@@ -1,0 +1,30 @@
+﻿@page "/Account/Login"
+@model QuanLyHocVien.Pages.LoginModel
+
+<h1>Đăng nhập</h1>
+
+<form method="post">
+    <div>
+        <label asp-for="Input.UserName">Tên đăng nhập</label>
+        <input asp-for="Input.UserName" autocomplete="username" />
+        <span asp-validation-for="Input.UserName"></span>
+    </div>
+
+    <div>
+        <label asp-for="Input.Password">Mật khẩu</label>
+        <input asp-for="Input.Password" type="password" autocomplete="current-password" />
+        <span asp-validation-for="Input.Password"></span>
+    </div>
+
+    <div>
+        <input asp-for="Input.RememberMe" />
+        <label asp-for="Input.RememberMe">Ghi nhớ đăng nhập</label>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p role="alert">@Model.ErrorMessage</p>
+    }
+
+    <button type="submit">Đăng nhập</button>
+</form>

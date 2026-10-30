@@ -1,0 +1,41 @@
+@page "/hoc-vien"
+@page "/ket-qua-ren-luyen"
+@page "/bao-cao"
+@page "/lop-hoc"
+@page "/dot-danh-gia"
+@page "/tieu-chi"
+@page "/tai-khoan"
+@page "/nhat-ky-thao-tac"
+@attribute [Authorize]
+
+@inject NavigationManager Navigation
+<PageTitle>@title</PageTitle>
+<section class="page-heading"><h1>@title</h1><p>@description</p></section>
+<RadzenCard class="placeholder-card">
+    <RadzenIcon Icon="construction" class="placeholder-icon" />
+    <h2>Chức năng đang được xây dựng</h2>
+    <p>Bố cục và điều hướng đã sẵn sàng. Nhóm sẽ phát triển nội dung @title.ToLowerInvariant() tại đây.</p>
+    <RadzenButton Text="Về Tổng quan" Icon="arrow_back" Click="GoHome" />
+</RadzenCard>
+
+@code {
+    private string title = "Không gian làm việc";
+    private string description = "";
+    protected override void OnParametersSet()
+    {
+        var route = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?', '#')[0].Trim('/');
+        (title, description) = route switch
+        {
+            "hoc-vien" => ("Học viên", "Quản lý hồ sơ học viên và thông tin lớp."),
+            "ket-qua-ren-luyen" => ("Kết quả rèn luyện", "Theo dõi điểm và kết quả rèn luyện theo từng kỳ."),
+            "bao-cao" => ("Báo cáo", "Tổng hợp kết quả theo lớp và đợt đánh giá."),
+            "lop-hoc" => ("Lớp học", "Theo dõi danh sách lớp và cán bộ phụ trách."),
+            "dot-danh-gia" => ("Đợt đánh giá", "Quản lý thời gian và trạng thái các kỳ đánh giá."),
+            "tieu-chi" => ("Tiêu chí", "Bộ tiêu chí mẫu với tổng điểm tối đa 10."),
+            "tai-khoan" => ("Tài khoản", "Quản lý tài khoản và quyền truy cập hệ thống."),
+            "nhat-ky-thao-tac" => ("Nhật ký thao tác", "Tra cứu người chỉnh sửa, thời gian và giá trị trước sau."),
+            _ => ("Không gian làm việc", "")
+        };
+    }
+    private void GoHome() => Navigation.NavigateTo("/");
+}

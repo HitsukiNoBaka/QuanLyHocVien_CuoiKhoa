@@ -1,30 +1,56 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">QuanLyHocVien</a>
+<div class="navigation-shell">
+    <a class="academy-brand" href="/" aria-label="Học viện An ninh nhân dân — Trang tổng quan" @onclick="Navigate">
+        <RadzenImage Path="logo-hvannd.png" AlternateText="Logo Học viện An ninh nhân dân" class="academy-logo" />
+        <span class="academy-name">HỌC VIỆN<br /><strong>AN NINH NHÂN DÂN</strong></span>
+    </a>
+    <div class="application-label">QUẢN LÝ HỌC VIÊN</div>
+
+    <nav aria-label="Điều hướng chính">
+        <section class="nav-group" aria-labelledby="workspace-nav-heading">
+            <h2 id="workspace-nav-heading" class="nav-heading">KHÔNG GIAN LÀM VIỆC</h2>
+            @foreach (var item in WorkspaceItems)
+            {
+                <NavLink class="app-nav-link" href="@item.Path" Match="@(item.Path == "" ? NavLinkMatch.All : NavLinkMatch.Prefix)" @onclick="Navigate">
+                    <RadzenIcon Icon="@item.Icon" /><span>@item.Title</span>
+                </NavLink>
+            }
+        </section>
+
+        @* Khi triển khai đăng nhập, bọc nhóm này bằng AuthorizeView Roles="Admin". *@
+        <section class="nav-group administration" aria-labelledby="admin-nav-heading">
+            <h2 id="admin-nav-heading" class="nav-heading">QUẢN TRỊ</h2>
+            @foreach (var item in AdminItems)
+            {
+                <NavLink class="app-nav-link" href="@item.Path" @onclick="Navigate">
+                    <RadzenIcon Icon="@item.Icon" /><span>@item.Title</span>
+                </NavLink>
+            }
+        </section>
+    </nav>
+
+    <div class="navigation-footer">
+        <button class="logout-button" type="button" @onclick="Logout"><RadzenIcon Icon="logout" /><span>Đăng xuất</span></button>
+        <div class="system-status"><span></span> Hệ thống quản lý rèn luyện</div>
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+@code {
+    [Parameter] public EventCallback OnNavigate { get; set; }
+    [Parameter] public EventCallback OnLogout { get; set; }
+    private Task Navigate() => OnNavigate.InvokeAsync();
+    private Task Logout() => OnLogout.InvokeAsync();
+    private sealed record MenuItem(string Title, string Path, string Icon);
+    private static readonly MenuItem[] WorkspaceItems = [
+        new("Tổng quan", "", "dashboard"),
+        new("Học viên", "hoc-vien", "person_outline"),
+        new("Kết quả rèn luyện", "ket-qua-ren-luyen", "done"),
+        new("Báo cáo", "bao-cao", "bar_chart")
+    ];
+    private static readonly MenuItem[] AdminItems = [
+        new("Lớp học", "lop-hoc", "table_rows"),
+        new("Đợt đánh giá", "dot-danh-gia", "schedule"),
+        new("Tiêu chí", "tieu-chi", "checklist"),
+        new("Tài khoản", "tai-khoan", "settings"),
+        new("Nhật ký thao tác", "nhat-ky-thao-tac", "format_list_bulleted")
+    ];
+}

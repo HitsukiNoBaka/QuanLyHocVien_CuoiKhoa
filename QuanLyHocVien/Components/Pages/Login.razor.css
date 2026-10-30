@@ -1,0 +1,109 @@
+.login-screen {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.login-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+    background: #fff;
+}
+
+    .login-brand img {
+        width: 190px;
+        height: 190px;
+        object-fit: contain;
+        margin-bottom: 1.5rem;
+    }
+
+    .login-brand h1 {
+        color: #172b2b;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .login-brand p {
+        color: #778685;
+        font-size: 1.1rem;
+    }
+
+.login-panel {
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background: #083a3b;
+}
+
+.login-card {
+    width: min(100%, 430px);
+    padding: 2.5rem;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 12px 32px #123b4933;
+}
+
+    .login-card h2 {
+        margin-bottom: 1.5rem;
+        color: #172b2b;
+    }
+
+    .login-card label {
+        display: block;
+        margin: 1rem 0 0.4rem;
+    }
+
+    .login-card input:not([type="checkbox"]) {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccd8d7;
+        border-radius: 8px;
+    }
+
+    .login-card .remember-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .login-card button {
+        width: 100%;
+        margin-top: 1.25rem;
+        padding: 0.8rem;
+        border: 0;
+        border-radius: 8px;
+        color: #fff;
+        background: #216c60;
+        font-weight: 600;
+    }
+
+@media (max-width: 760px) {
+    .login-screen {
+        grid-template-columns: 1fr;
+    }
+
+    .login-brand {
+        padding: 2rem 1rem;
+    }
+
+        .login-brand img {
+            width: 120px;
+            height: 120px;
+        }
+
+    .login-panel {
+        min-height: 65vh;
+    }
+}
+.login-error {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: #842029;
+    background: #f8d7da;
+}
