@@ -1,0 +1,62 @@
+﻿@page "/Login"
+@layout QuanLyHocVien.Components.Layout.LoginLayout
+@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>Đăng nhập | Quản lý rèn luyện học viên</PageTitle>
+
+<main class="login-screen">
+    
+    <section class="login-brand">
+        <img src="/logo-hvannd.png"
+             alt="Logo Học viện An ninh nhân dân" />
+
+        <h1>HỌC VIỆN<br />AN NINH NHÂN DÂN</h1>
+        <p>Quản lý rèn luyện học viên</p>
+    </section>
+
+    <section class="login-panel">
+        <div class="login-card">
+            <h2>Đăng nhập</h2>
+            @if (ErrorMessage is not null)
+    {
+        <div class="login-error" role="alert">@ErrorMessage</div>
+    }
+            <form method="post"
+                  action="/Account/Login"
+                  data-enhance="false">
+                <AntiforgeryToken />
+
+                <label for="username">Tên đăng nhập</label>
+                <input id="username"
+                       name="Input.UserName"
+                       autocomplete="username"
+                       required />
+
+                <label for="password">Mật khẩu</label>
+                <input id="password"
+                       name="Input.Password"
+                       type="password"
+                       autocomplete="current-password"
+                       required />
+
+                <label class="remember-row">
+                    <input name="Input.RememberMe" type="checkbox" value="true" />
+                    Ghi nhớ đăng nhập
+                </label>
+
+                <button type="submit">Đăng nhập</button>
+            </form>
+        </div>
+    </section>
+</main>
+@code {
+    [SupplyParameterFromQuery(Name = "error")]
+    public string? Error { get; set; }
+
+    private string? ErrorMessage => Error switch
+    {
+        "invalid" => "Tên đăng nhập hoặc mật khẩu không đúng.",
+        "locked" => "Tài khoản tạm khóa do đăng nhập sai nhiều lần.",
+        _ => null
+    };
+}

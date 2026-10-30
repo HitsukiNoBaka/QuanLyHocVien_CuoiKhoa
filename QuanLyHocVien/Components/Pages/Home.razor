@@ -1,7 +1,42 @@
-﻿@page "/"
+@page "/"
+@attribute [Authorize]
+<PageTitle>Tổng quan hệ thống</PageTitle>
+<section class="page-heading" aria-labelledby="dashboard-title">
+    <h1 id="dashboard-title">Tổng quan hệ thống</h1>
+    <p>Học kỳ I 2026–2027 / Thang điểm 10</p>
+</section>
 
-<PageTitle>Home</PageTitle>
+<div class="dashboard-stats" aria-label="Thống kê rèn luyện">
+    @foreach (var statistic in Statistics)
+    {
+        <RadzenCard class="stat-card"><span class="stat-label">@statistic.Label</span><strong class="stat-value">@statistic.Value</strong></RadzenCard>
+    }
+</div>
 
-<h1>Hello, world!</h1>
+<RadzenCard class="distribution-card">
+    <h2>Phân bố xếp loại đã duyệt</h2>
+    <div class="distribution-list">
+        @foreach (var item in Distribution)
+        {
+            <div class="distribution-row">
+                <span class="distribution-label">@item.Label</span>
+                <RadzenProgressBar Value="@item.Count" Max="60" ShowValue="false" aria-label="@(item.Label + ": " + item.Count + " học viên")" class="distribution-bar" />
+                <strong class="distribution-count">@item.Count</strong>
+            </div>
+        }
+    </div>
+</RadzenCard>
+<p class="sample-data-note">Dữ liệu minh họa giao diện.</p>
 
-Welcome to your new app.
+@code {
+    // Dữ liệu mẫu; thay bằng truy vấn database khi xây dựng chức năng thống kê.
+    private sealed record Statistic(string Label, string Value);
+    private sealed record ClassificationCount(string Label, int Count);
+    private static readonly Statistic[] Statistics = [
+        new("Học viên", "128"), new("Phiếu đã duyệt", "112"),
+        new("Chờ duyệt", "16"), new("Điểm trung bình", "8,2")
+    ];
+    private static readonly ClassificationCount[] Distribution = [
+        new("Xuất sắc", 24), new("Tốt", 48), new("Khá", 30), new("Trung bình", 10)
+    ];
+}
