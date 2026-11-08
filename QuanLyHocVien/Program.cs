@@ -50,9 +50,19 @@ var app = builder.Build();
 //Kiểm tra xem đã có 3 vai trò chưa , nếu chưa thì tạo, nếu có rồi thì không tạo lại
 using (var scope = app.Services.CreateScope())
 {
-    await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider);
-    await IdentitySeeder.SeedAdminAsync(scope.ServiceProvider, app.Configuration);
+    var dbFactory =
+        scope.ServiceProvider
+            .GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
 
+    await using var db = await dbFactory.CreateDbContextAsync();
+    await db.Database.MigrateAsync();
+
+    await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider);
+
+    if (app.Environment.IsDevelopment())
+    {
+        await IdentitySeeder.SeedAdminAsync(scope.ServiceProvider);
+    }
 }
 
 // 7. Cấu hình xử lý lỗi

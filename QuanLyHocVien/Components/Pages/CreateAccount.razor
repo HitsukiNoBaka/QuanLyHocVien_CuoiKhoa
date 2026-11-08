@@ -1,0 +1,129 @@
+﻿@attribute [Authorize(Roles = "Admin")]
+@using System.ComponentModel.DataAnnotations
+@inject UserManager<ApplicationUser> UserManager
+@page "/tao-tai-khoan"
+<PageTitle>Tạo tài khoản</PageTitle>
+<RadzenCard Style="max-width: 600px; margin: 2rem auto;">
+    <RadzenText Text="Tạo tài khoản" TextStyle="TextStyle.H4" />
+
+    <RadzenTemplateForm TItem="CreateAccountInput"
+                        Data="@Input"
+                        @*Submit="@CreateUserAsync"*@>
+        <RadzenDataAnnotationValidator />
+
+        <div class="mb-3">
+            <RadzenFormField Text="Tên đăng nhập" Style="width: 100%;">
+                <RadzenTextBox Name="Tên đăng nhập" @bind-Value="Input.tenDangNhap"
+                               Style="width: 100%;" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Tên đăng nhập"
+                                     Text="Hãy nhập tên đăng nhập." />
+        </div>
+
+        <div class="mb-3">
+            <RadzenFormField Text="Email" Style="width: 100%;">
+                <RadzenTextBox Name="Email" @bind-Value="Input.Email"
+                               Style="width: 100%;" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Email" Text="Hãy nhập email." />
+            <RadzenEmailValidator Component="Email" Text="Email chưa đúng định dạng." />
+        </div>
+        <div class="mb-3">
+            <RadzenFormField Text="Số điện thoại" Style="width:100%">
+                <RadzenTextBox Name="Số điện thoại" @bind-Value="Input.sDT"
+                               Style="width:100%" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Số điện thoại" Text="Hãy nhập số điện thoại." />
+            <RadzenRegexValidator Component="Số điện thoại" 
+                                  Pattern="^(0|\+84)(3|5|7|8|9)[0-9]{8}$" 
+                                  Text="Số điện thoại chưa đúng định dạng." />
+        </div>
+        <div class="mb-3">
+            <RadzenFormField Text="Mật khẩu" Style="width: 100%;">
+                <RadzenPassword Name="Password" @bind-Value="Input.matKhau"
+                                Style="width: 100%;" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Mật khẩu"
+                                     Text="Hãy nhập mật khẩu." />
+        </div>
+
+        <div class="mb-3">
+            <RadzenFormField Text="Họ và tên" Style="width: 100%;">
+                <RadzenTextBox Name="FullName" @bind-Value="Input.hoTen"
+                               Style="width: 100%;" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Họ và tên"
+                                     Text="Hãy nhập họ và tên." />
+        </div>
+
+        <div class="mb-3">
+            <RadzenFormField Text="Ngày sinh" Style="width: 70%;">
+                <RadzenDatePicker Name="Ngày sinh" @bind-Value="Input.ngaySinh"
+                                  Style="width: 80%;" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Ngày sinh"
+                                     Text="Hãy chọn ngày sinh." />
+            <RadzenSelectBar Name="Giới tính" @bind-Value="Input.gioiTinh" TValue="string"
+                             Style="width: 30%;">
+                <Items>
+                    <RadzenSelectBarItem Text="Nam" Value="@("Nam")" />
+                    <RadzenSelectBarItem Text="Nữ" Value="@("Nữ")" />
+                </Items>
+            </RadzenSelectBar>
+            <RadzenRequiredValidator Component="Giới tính"
+                                     Text="Hãy chọn giới tính." />
+        </div>
+        
+
+        <div class="mb-3">
+            <RadzenFormField Text="Vai trò" Style="width: 100%;">
+                <RadzenDropDown Name="Role"
+                                @bind-Value="Input.vaiTro"
+                                Data="@Roles"
+                                Style="width: 100%;" />
+            </RadzenFormField>
+        </div>
+
+        <RadzenButton Text="Tạo tài khoản"
+                      Icon="person_add"
+                      ButtonType="ButtonType.Submit"
+                      ButtonStyle="ButtonStyle.Primary" />
+    </RadzenTemplateForm>
+
+    @if (!string.IsNullOrWhiteSpace(Message))
+    {
+        <RadzenAlert AlertStyle="AlertStyle.Info" class="mt-3">
+            @Message
+        </RadzenAlert>
+    }
+</RadzenCard>
+    @code {
+    private string[] Roles = ["Student", "Staff", "Admin"];
+    private string Message = string.Empty;
+    private sealed class CreateAccountInput
+    {
+        [Required(ErrorMessage = "Hãy nhập tên đăng nhập")]
+        public string tenDangNhap { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Hãy nhập Email")]
+        [EmailAddress(ErrorMessage = "Hãy nhập Email hợp lệ")]
+        public string Email { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Hãy nhập số điện thoại")]
+        [Phone(ErrorMessage = "Hãy nhập số điện thoại hợp lệ")]
+        public string sDT { get; set; } = string.Empty;
+        [Required(ErrorMessage ="Hãy nhập mật khẩu")]
+        public string matKhau { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Hãy nhập họ và tên")]
+        public string hoTen { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Hãy nhập ngày tháng năm sinh")]
+        public DateOnly ngaySinh { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        [Required(ErrorMessage = "Hãy chọn giới tính")]
+        public string gioiTinh { get; set; } = string.Empty;
+        [Required(ErrorMessage ="Hãy nhập lớp")]
+        public string lop { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Hãy chọn vai trò")]
+        public string vaiTro{ get; set; } = string.Empty;
+    }
+    private CreateAccountInput Input { get; set; } = new();
+    @*private async Task CreateUserAsync(CreateAccountInput input);*@
+
+}
