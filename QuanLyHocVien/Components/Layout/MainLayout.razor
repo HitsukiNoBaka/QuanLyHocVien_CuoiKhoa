@@ -1,5 +1,6 @@
 @inherits LayoutComponentBase
-
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <a class="skip-link" href="#main-content">Đến nội dung chính</a>
 <div class="app-shell" @onkeydown="HandleKeyDown">
     <aside id="app-navigation" class="app-sidebar @(menuOpen ? "is-open" : "")" aria-label="Thanh điều hướng">
@@ -25,7 +26,7 @@
                 <Authorized>
                     <div class="account-menu">
                         <div class="account-identity">
-                            <span>@auth.User.Identity?.Name</span>
+                            <span>@(DisplayName ?? auth.User.Identity?.Name)</span>
 
                             @if (auth.User.IsInRole("Admin"))
                             {
@@ -102,5 +103,15 @@
         }
 
         return userName[..Math.Min(2, userName.Length)].ToUpperInvariant();
+    }
+    private string? DisplayName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState =
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        var user = await UserManager.GetUserAsync(authState.User);
+        DisplayName = user?.FullName;
     }
 }

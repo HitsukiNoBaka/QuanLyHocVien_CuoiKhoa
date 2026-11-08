@@ -18,9 +18,9 @@
         <div class="login-card">
             <h2>Đăng nhập</h2>
             @if (ErrorMessage is not null)
-    {
-        <div class="login-error" role="alert">@ErrorMessage</div>
-    }
+            {
+                <div class="login-error" role="alert">@ErrorMessage</div>
+            }
             <form method="post"
                   action="/Account/Login"
                   data-enhance="false">
@@ -59,4 +59,10 @@
         "locked" => "Tài khoản tạm khóa do đăng nhập sai nhiều lần.",
         _ => null
     };
+    private bool ShowPassword;
+
+    private void TogglePasswordVisibility()
+    {
+        ShowPassword = !ShowPassword;
+    }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using QuanLyHocVien.Models;
 
 namespace QuanLyHocVien.Data;
@@ -36,26 +35,15 @@ public static class IdentitySeeder
             }
         }
     }
-    public static async Task SeedAdminAsync(
-    IServiceProvider services,
-    IConfiguration configuration)
+    public static async Task SeedAdminAsync(IServiceProvider services)
     {
+        const string userName = "basic-admin";
+        const string email = "admin@example.com";
+        const string fullName = "Quản trị viên";
+        const string password = "Admin@1234";
+
         var userManager =
             services.GetRequiredService<UserManager<ApplicationUser>>();
-
-        var userName = configuration["SeedAdmin:UserName"];
-        var email = configuration["SeedAdmin:Email"];
-        var fullName = configuration["SeedAdmin:FullName"];
-        var password = configuration["SeedAdmin:Password"];
-
-        if (string.IsNullOrWhiteSpace(userName)
-            || string.IsNullOrWhiteSpace(email)
-            || string.IsNullOrWhiteSpace(fullName)
-            || string.IsNullOrWhiteSpace(password))
-        {
-            throw new InvalidOperationException(
-                "Thiếu cấu hình tài khoản quản trị viên trong User Secrets.");
-        }
 
         var admin = await userManager.FindByNameAsync(userName);
 
@@ -78,7 +66,7 @@ public static class IdentitySeeder
                     createResult.Errors.Select(error => error.Description));
 
                 throw new InvalidOperationException(
-                    $"Không tạo được tài khoản quản trị viên: {errors}");
+                    $"Không tạo được tài khoản Admin mẫu: {errors}");
             }
         }
 
